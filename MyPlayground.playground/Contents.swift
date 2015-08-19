@@ -161,6 +161,9 @@ println(mappedNumbers)
 let sortedNumbers = sorted(numbers) {$0 > $1}
 println(sortedNumbers)
 
+let sortedNumbers2 = sorted(numbers) {$1 > $0}
+println(sortedNumbers2)
+
 class Shape {
     var numberOfSides = 0
     var name: String
@@ -214,6 +217,247 @@ class Circle: Shape {
 let testCircle = Circle(radius: 3.4, name: "first circle")
 testCircle.area()
 testCircle.simpleDescription()
+
+class EquilateralTriangle: Shape {
+    var sideLength: Double = 0.0
+    init(sideLength: Double, name: String) {
+        self.sideLength = sideLength
+        super.init(name: name)
+        numberOfSides = 3
+    }
+    var perimeter: Double {
+        get {
+            return 3.0 * sideLength
+        }
+        set {
+            sideLength = newValue/3.0
+        }
+    }
+    override func simpleDescription() -> String {
+        return "An equilateral triangle with sides of length \(sideLength)"
+    }
+}
+
+var triangle = EquilateralTriangle(sideLength: 3.1, name: "tr")
+println(triangle.perimeter)
+triangle.perimeter = 9.9
+println(triangle.sideLength)
+
+
+class TriangleAndSquare {
+    var triangle: EquilateralTriangle {
+        willSet {
+           triangle.sideLength = newValue.sideLength
+        }
+    }
+    var square: Square{
+        willSet {
+            square.sideLength = newValue.sideLength
+        }
+    }
+    init(size: Double, name: String){
+        square = Square(sideLength: size, name: name)
+        triangle = EquilateralTriangle(sideLength: size, name: name)
+    }
+}
+
+var triangleAndSquare = TriangleAndSquare(size: 10, name: "another shape")
+println(triangleAndSquare.square.sideLength)
+println(triangleAndSquare.triangle.sideLength)
+triangleAndSquare.square = Square(sideLength: 50, name: "larger square")
+println(triangleAndSquare.triangle.sideLength)
+println(triangleAndSquare.triangle.name)
+println(triangleAndSquare.square.name)
+
+class Counter {
+    var count: Int = 0
+    func incrementBy(amount: Int, numberOfTimes times: Int){
+        count += amount*times
+    }
+}
+var counter = Counter()
+counter.incrementBy(2, numberOfTimes: 7)
+counter.incrementBy(3, numberOfTimes: 3)
+
+enum Rank: Int {
+    case Ace = 1
+    case Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten
+    case Jack, Queen, King
+    
+    func simpleDescripion() -> String{
+        switch self {
+        case .Ace:
+            return "ace"
+        case .Jack:
+            return "jack"
+        case .Queen:
+            return "queen"
+        case .King:
+            return "king"
+        default:
+            return String(self.rawValue)
+        }
+    }
+}
+
+let ace = Rank.Ace
+let aceRawValue = ace.rawValue
+
+func compare(firstRank first: Rank, secondRank second: Rank) -> String {
+    if first.rawValue > second.rawValue {
+        return "\(first.simpleDescripion()) > \(second.simpleDescripion())"
+    }
+    if first.rawValue == second.rawValue {
+        return "\(first.simpleDescripion()) = \(second.simpleDescripion())"
+    }else {
+        return "\(second.simpleDescripion()) > \(first.simpleDescripion())"
+    }
+}
+let four = Rank.Four
+
+compare(firstRank: ace, secondRank: four)
+compare(firstRank: Rank.Queen, secondRank: Rank.Seven)
+compare(firstRank: ace, secondRank: Rank.Ace)
+
+if let convertedRank = Rank( rawValue: 3){
+    let treeDescription = convertedRank.simpleDescripion()
+}
+
+enum Suit {
+    case Spades, Hearts, Diamonds, Clubs
+    func simpleDescription() -> String {
+        switch self {
+        case .Spades:
+            return "spades"
+        case .Hearts:
+            return "hearts"
+        case .Diamonds:
+            return "diamonds"
+        case .Clubs:
+            return "clubs"
+        }
+    }
+    func color() -> String {
+        switch self {
+        case .Spades, .Clubs:
+            return "black"
+        case .Diamonds, .Hearts:
+            return "red"
+        }
+    }
+}
+
+let hearts = Suit.Hearts
+let heartsDescription = hearts.simpleDescription()
+let heartsColor = hearts.color()
+
+struct Card {
+    var rank: Rank
+    var suit: Suit
+    func simpleDescription() -> String {
+        return "The \(rank.simpleDescripion()) of \(suit.simpleDescription()) "
+    }
+    func deckOfCards() -> String {
+        let cardRank = [Rank.Ace, Rank.Two, Rank.Three, Rank.Four, Rank.Five, Rank.Six, Rank.Seven, Rank.Eight, Rank.Nine, Rank.Ten, Rank.Jack, Rank.Queen, Rank.King]
+        let cardSuit = [Suit.Hearts, Suit.Diamonds, Suit.Clubs, Suit.Spades]
+        var deck: [Card] = []
+        var deckCardsName = ""
+        for deckRrank in cardRank {
+            for deckSuit in cardSuit{
+                var number=0
+                deck[number] = Card(rank: deckRrank, suit: deckSuit)
+                deckCardsName+="\(deck[number].simpleDescription()) "
+                number+=1
+            }
+        }
+        return deckCardsName
+    }
+}
+
+let threeOfSpades = Card(rank: .Three, suit: .Spades)
+let threeOfSpadesDescription = threeOfSpades.simpleDescription()
+
+
+enum ServerResponse {
+    case Result(String, String)
+    case Error(String)
+    case TryAgain(String)
+}
+let success = ServerResponse.Result("6:00 am", "8:09 pm")
+let failure = ServerResponse.Error("Out of cheese.")
+let tryAgain = ServerResponse.TryAgain("")
+
+switch success {
+case let .Result(sunrise, sunset):
+    let serverResponse = "Sunrise is at \(sunrise) and sunset is at \(sunset)."
+case let .Error(error):
+    let serverResponse = "Failure... \(error)"
+case let .TryAgain(tryAgain):
+    let serverResponse = "Try again in a minute!"
+}
+
+switch failure {
+case let .Result(sunrise, sunset):
+    let serverResponse = "Sunrise is at \(sunrise) and sunset is at \(sunset)."
+case let .Error(error):
+    let serverResponse = "Failure... \(error)"
+case let .TryAgain(tryAgain):
+    let serverResponse = "Try again in a minute!"
+}
+switch tryAgain {
+case let .Result(sunrise, sunset):
+    let serverResponse = "Sunrise is at \(sunrise) and sunset is at \(sunset)."
+case let .Error(error):
+    let serverResponse = "Failure... \(error)"
+case let .TryAgain(tryAgain):
+    let serverResponse = "Try again in a minute!"
+}
+
+protocol ExampleProtocol {
+    var simpleDescription: String {get}
+    mutating func adjust()
+}
+
+class SimpleClass: ExampleProtocol {
+    var simpleDescription: String = "A very simple class."
+    var anotherProperty: Int = 69105
+    func adjust() {
+        simpleDescription += " Now 100% adjusted."
+    }
+}
+
+var a = SimpleClass()
+a.adjust()
+let aDescription = a.simpleDescription
+
+struct SimpleStructure: ExampleProtocol {
+    var simpleDescription: String = "A simple structure"
+    mutating func adjust() {
+        simpleDescription += " (adjusted)"
+    }
+}
+var b = SimpleStructure()
+b.adjust()
+let bDescription = b.simpleDescription
+
+extension Int: ExampleProtocol {
+    var simpleDescription: String {
+        return "The number \(self)"
+    }
+    mutating func adjust() {
+        self += 42
+    }
+}
+
+func repeat<Item>(item: Item, times: Int) -> [Item] {
+    var result = [Item]()
+    for i in 0..<times {
+        result.append(item)
+    }
+    return result
+}
+repeat("knock", 4)
+
 
 
 
