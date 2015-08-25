@@ -458,18 +458,32 @@ func repeat<Item>(item: Item, times: Int) -> [Item] {
 }
 repeat("knock", 4)
 
+let possibleNumber = "124 "
 
+if let actualNumber = possibleNumber.toInt() {
+    println("\'\(possibleNumber)\' has an integer value of \(actualNumber)")
+} else {
+    println("\'\(possibleNumber)\' could not be converted to an integer")
+}
 
+var emptyString = String()
+if emptyString.isEmpty {
+    println("Nothing to see here")
+}
 
+let defaultColorName = "red"
+var userDefinedColorName: String?
+var colorNameToUse = userDefinedColorName ?? defaultColorName
+userDefinedColorName = "green"
+colorNameToUse = userDefinedColorName ?? defaultColorName
 
-
-
-
-
-
-
-
-
+for character in "Hello!" {
+    println(character)
+}
+let hellowCharacters: [Character] = ["H", "e", "l", "l", "o", "!"]
+var hellowString = String(hellowCharacters)
+let exclamationMark: Character = "!"
+hellowString.append(exclamationMark)
 
 
 
