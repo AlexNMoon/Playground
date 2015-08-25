@@ -485,6 +485,74 @@ var hellowString = String(hellowCharacters)
 let exclamationMark: Character = "!"
 hellowString.append(exclamationMark)
 
+let babyChick = "\u{1F425}"
+
+let babyChickInCircle = "\u{1F425}\u{20DD} I'm a chick!"
+
+count(babyChick)
+babyChickInCircle.startIndex
+babyChickInCircle.endIndex
+
+babyChickInCircle[advance(babyChickInCircle.startIndex, 6)]
+
+var letters = Set<Character>()
+let sentence = "My mom "
+for index in indices(sentence) {
+    letters.insert(sentence[index])
+}
+letters.insert("z")
+for letter in sorted(letters) {
+    println("\(letter)")
+}
+
+let oddDigits: Set = [1, 3, 5, 7, 9]
+let evenDigits: Set = [0, 2, 4, 6, 8]
+let singleDigitPrimeNumbers: Set = [2, 3, 5, 7]
+sorted(oddDigits.union(evenDigits))
+sorted(oddDigits.intersect(evenDigits))
+sorted(oddDigits.subtract(singleDigitPrimeNumbers))
+sorted(oddDigits.exclusiveOr(singleDigitPrimeNumbers))
+sorted(oddDigits.exclusiveOr(evenDigits))
+singleDigitPrimeNumbers.isSubsetOf(oddDigits.union(evenDigits))
+evenDigits.isDisjointWith(singleDigitPrimeNumbers)
+evenDigits.isDisjointWith(oddDigits)
+
+
+var airports = ["YYZ": "Toronto Pearson", "DUB": "Dublin"]
+airports.count
+airports["LHR"] = "London"
+if let oldValue = airports.updateValue("London Heathrow", forKey: "LHR") {
+    println("The old value for LHR was \(oldValue).")
+}
+if let airportName = airports["AIP"] {
+    println("the name of the airport is \(airportName).")
+} else {
+    println("That airport is not in the airports dictionary.")
+}
+for (airportCode, airportName) in airports {
+    println("\(airportCode): \(airportName)")
+}
+for airportCode in airports.keys {
+    println("Airport code: \(airportCode)")
+}
+for airportName in airports.values {
+    println("Airport name: \(airportName)")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
