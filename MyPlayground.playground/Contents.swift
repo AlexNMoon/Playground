@@ -540,6 +540,72 @@ for airportName in airports.values {
 }
 
 
+var arrayOfNumbers = [8, 3, 20, 6, 17]
+var numberOfChanges: Int
+do {
+    numberOfChanges = 0
+    for index in 0..<arrayOfNumbers.count-1 {
+        if arrayOfNumbers[index]>arrayOfNumbers[index+1] {
+            swap(&arrayOfNumbers[index], &arrayOfNumbers[index+1])
+            ++numberOfChanges
+        }
+    }
+} while numberOfChanges>0
+
+println("\(arrayOfNumbers)")
+
+var arrayOfWords = ["imagination", "mama", "car", "apple"]
+do {
+    numberOfChanges=0
+    for index in 0..<arrayOfWords.count-1 {
+    if count(arrayOfWords[index])>count(arrayOfWords[index+1]){
+        swap(&arrayOfWords[index], &arrayOfWords[index+1])
+        ++numberOfChanges
+    }
+    }
+} while numberOfChanges>0
+
+println("\(arrayOfWords)")
+
+do{
+    numberOfChanges=0
+    for index in 0..<arrayOfWords.count-1 {
+        if arrayOfWords[index]>arrayOfWords[index+1] {
+            swap(&arrayOfWords[index], &arrayOfWords[index+1])
+            ++numberOfChanges
+        }
+    }
+} while numberOfChanges>0
+
+println("\(arrayOfWords)")
+
+func bubbleSorting <T: Comparable> (inout array: [T]) -> [T]{
+    var numberOfChanges: Int
+    do {
+        numberOfChanges=0
+        for index in 0..<array.count-1 {
+            if array[index]>array[index+1] {
+                swap(&array[index], &array[index+1])
+                ++numberOfChanges
+            }
+        }
+    } while numberOfChanges>0
+    return array
+}
+
+var arrayOfInt = [6, 12, 5, 1, 67]
+let sortedArrayOfInt = bubbleSorting(&arrayOfInt)
+var arrayOfDouble = [9.4, 3.1, 1.4]
+let sortedArrayOfDouble = bubbleSorting(&arrayOfDouble)
+
+
+
+
+
+
+
+
+
 
 
 
