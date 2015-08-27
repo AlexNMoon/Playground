@@ -581,7 +581,7 @@ println("\(arrayOfWords)")
 
 func bubbleSorting <T: Comparable> (inout array: [T]) -> [T]{
     var numberOfChanges: Int
-    do {
+    do { // FYI: do .. while closure is not valid in the next verion of swift (2.0)
         numberOfChanges=0
         for index in 0..<array.count-1 {
             if array[index]>array[index+1] {
@@ -597,6 +597,52 @@ var arrayOfInt = [6, 12, 5, 1, 67]
 let sortedArrayOfInt = bubbleSorting(&arrayOfInt)
 var arrayOfDouble = [9.4, 3.1, 1.4]
 let sortedArrayOfDouble = bubbleSorting(&arrayOfDouble)
+
+class Node: Hashable, Equatable {
+    let symbol: Character?
+    let parent: Node?
+    var children: Set<Node> = []
+    var isEnd = false
+    init(symbol: Character?, parent: Node?) {
+        self.symbol = symbol
+        self.parent = parent
+    }
+}
+
+struct Tree {
+    let mainNode = Node(symbol: nil, parent: nil)
+    func addWord (node: Node, word: String) {
+        if !word.isEmpty {
+            node.children.insert(word[word.startIndex])
+            addWord(Node(symbol: word[word.startIndex], parent: node), word: dropFirst(word))
+        } else {
+            node.isEnd = true
+        }
+    }
+    
+}
+
+
+let tree = Tree()
+let vocabulary = ["cat", "dog", "tree", "sun"]
+
+
+for index in 0..<vocabulary.count {
+    tree.addWord(tree.mainNode, word: vocabulary[index])
+    }
+
+
+println(tree.mainNode.children)
+
+
+
+
+
+
+
+
+
+
 
 
 
