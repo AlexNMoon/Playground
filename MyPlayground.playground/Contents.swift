@@ -598,6 +598,13 @@ let sortedArrayOfInt = bubbleSorting(&arrayOfInt)
 var arrayOfDouble = [9.4, 3.1, 1.4]
 let sortedArrayOfDouble = bubbleSorting(&arrayOfDouble)
 
+
+
+func ==(lhs: Node, rhs: Node) -> Bool {
+    return lhs.symbol == rhs.symbol
+}
+
+
 class Node: Hashable, Equatable {
     let symbol: Character?
     let parent: Node?
@@ -607,44 +614,104 @@ class Node: Hashable, Equatable {
         self.symbol = symbol
         self.parent = parent
     }
+    var hashValue: Int {
+        if symbol != nil {
+            return self.symbol!.hashValue
+        } else {
+            return 0
+        }
+    }
 }
 
 struct Tree {
     let mainNode = Node(symbol: nil, parent: nil)
-    func addWord (node: Node, word: String) {
+    func addWord(node: Node, word: String) {
+        if node.parent != nil {
+            node.parent?.children.insert(node)
+        }
         if !word.isEmpty {
-            node.children.insert(word[word.startIndex])
-            addWord(Node(symbol: word[word.startIndex], parent: node), word: dropFirst(word))
+            var index = 0
+            for child in node.children {
+                if child.symbol == word[word.startIndex] {
+                    addWord(child, word: dropFirst(word))
+                    ++index
+                }
+            }
+            if index == 0 {
+                addWord(Node(symbol: word[word.startIndex], parent: node), word: dropFirst(word))
+            }
         } else {
             node.isEnd = true
         }
     }
-    
+    func findWord(symbol: Character) -> [String] {
+        var currentNode: Node
+        for child in mainNode.children {
+            if child.symbol == symbol {
+                currentNode = child
+                return lookThroughTree(currentNode)
+            }
+        }
+        return []
+    }
+    func lookThroughTree(node: Node) -> [String]{
+        var words: [String] = []
+        var reverse = ""
+        if node.isEnd {
+            for scalar in makeWord(node, word: "").unicodeScalars {
+                var char = "\(scalar)"
+                reverse = char + reverse
+            }
+            words.append(reverse)
+        }
+        if !node.children.isEmpty {
+            for child in node.children {
+                words + lookThroughTree(child)
+            }
+        }
+        return words
+    }
+    func makeWord(node: Node, word: String) -> String {
+        var currentWord = word
+        if node.symbol != nil {
+            currentWord.append(node.symbol!)
+            makeWord(node.parent!, word: currentWord)
+            return currentWord
+        }
+        return currentWord
+    }
 }
 
 
 let tree = Tree()
-let vocabulary = ["cat", "dog", "tree", "sun"]
+let vocabulary = ["cat", "dog", "tree", "sun", "sunny"]
 
 
 for index in 0..<vocabulary.count {
     tree.addWord(tree.mainNode, word: vocabulary[index])
+}
+
+for child in tree.mainNode.children {
+    println("\(child.symbol)")
+}
+
+let foundWords = tree.findWord("c")
+
+for child in tree.mainNode.children {
+    println("\(child.symbol)")
+    for superChild in child.children {
+        println("\(superChild.symbol)")
     }
+}
 
-
-println(tree.mainNode.children)
-
-
-
-
-
-
-
-
-
-
-
-
+for child in tree.mainNode.children {
+    if child.symbol == "t" {
+        println("\(child.symbol)")
+        for superChild in child.children {
+            println("\(superChild.symbol)")
+        }
+    }
+}
 
 
 
