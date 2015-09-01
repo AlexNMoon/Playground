@@ -644,29 +644,37 @@ struct Tree {
             node.isEnd = true
         }
     }
-    func findWord(symbol: Character) -> [String] {
-        var currentNode: Node
-        for child in mainNode.children {
-            if child.symbol == symbol {
-                currentNode = child
-                return lookThroughTree(currentNode)
+    func findWord(word: String, currentNode: Node) -> [String] {
+        var words : [String] = []
+        if !word.isEmpty {
+            for child in currentNode.children {
+                if child.symbol == word[word.startIndex] {
+                    words += findWord(dropFirst(word), currentNode: child)
+                }
             }
+        } else {
+            words += lookThroughTree(currentNode)
         }
-        return []
+        return words
     }
     func lookThroughTree(node: Node) -> [String]{
         var words: [String] = []
+        var word = ""
         var reverse = ""
         if node.isEnd {
-            for scalar in makeWord(node, word: "").unicodeScalars {
-                var char = "\(scalar)"
-                reverse = char + reverse
+            var characterArray: [Character] = []
+            word = makeWord(node, word: "")
+            for character in word {
+                characterArray.append(character)
+            }
+            for var index = characterArray.count - 1; index >= 0; --index {
+                reverse.insert(characterArray[index], atIndex: reverse.endIndex)
             }
             words.append(reverse)
         }
         if !node.children.isEmpty {
             for child in node.children {
-                words + lookThroughTree(child)
+                words += lookThroughTree(child)
             }
         }
         return words
@@ -675,8 +683,8 @@ struct Tree {
         var currentWord = word
         if node.symbol != nil {
             currentWord.append(node.symbol!)
-            makeWord(node.parent!, word: currentWord)
-            return currentWord
+            currentWord = makeWord(node.parent!, word: currentWord)
+            
         }
         return currentWord
     }
@@ -695,7 +703,7 @@ for child in tree.mainNode.children {
     println("\(child.symbol)")
 }
 
-let foundWords = tree.findWord("c")
+let foundWords = tree.findWord("sunn", currentNode: tree.mainNode)
 
 for child in tree.mainNode.children {
     println("\(child.symbol)")
